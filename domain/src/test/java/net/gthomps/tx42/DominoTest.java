@@ -95,5 +95,9 @@ public class DominoTest {
 		
 		assertEquals(expected, dominos.length);
 	}
-
+	
+	@Test
+	public void dominosAreShuffled() {
+		fail("need to shuffle dominos");
+	}
 }
