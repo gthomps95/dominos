@@ -13,8 +13,8 @@ public class DominoTest {
 
 	@Test
 	public void testNewDominoHasCorrectHighSide() {
-		short high = 4;
-		short low = 2;
+		int high = 4;
+		int low = 2;
 		Domino domino = new Domino(high, low);
 		
 		assertEquals(high, domino.getHighSide());		
@@ -22,8 +22,8 @@ public class DominoTest {
 
 	@Test
 	public void testNewDominoHasCorrectLowSide() {
-		short high = 4;
-		short low = 2;
+		int high = 4;
+		int low = 2;
 		Domino domino = new Domino(high, low);
 		
 		assertEquals(low, domino.getLowSide());		
@@ -31,8 +31,8 @@ public class DominoTest {
 
 	@Test
 	public void testNewDominoIsDouble() {
-		short high = 4;
-		short low = 4;
+		int high = 4;
+		int low = 4;
 		Domino domino = new Domino(high, low);
 		
 		assertTrue(domino.getIsDouble());		
@@ -40,8 +40,8 @@ public class DominoTest {
 	
 	@Test 
 	public void testDominoToString() {
-		short high = 4;
-		short low = 2;
+		int high = 4;
+		int low = 2;
 		
 		Domino d = new Domino(high, low);
 		assertEquals("4:2", d.toString());
@@ -52,8 +52,8 @@ public class DominoTest {
 
 	@Test
 	public void testMaxValueCheck() {
-		short tooHigh = 7;
-		short low = 0;
+		int tooHigh = 7;
+		int low = 0;
 		
 		exception.expect(RuntimeException.class);
 		new Domino(tooHigh, low);
@@ -61,8 +61,8 @@ public class DominoTest {
 
 	@Test
 	public void testMinValueCheck() {
-		short high = 6;
-		short tooLow = -1;
+		int high = 6;
+		int tooLow = -1;
 		
 		exception.expect(RuntimeException.class);
 		new Domino(high, tooLow);
@@ -94,10 +94,5 @@ public class DominoTest {
 		long expected = MathUtils.factorial(rangeCount + sides - 1)/(MathUtils.factorial(sides) * MathUtils.factorial(rangeCount - 1));
 		
 		assertEquals(expected, dominos.length);
-	}
-	
-	@Test
-	public void dominosAreShuffled() {
-		fail("need to shuffle dominos");
 	}
 }
