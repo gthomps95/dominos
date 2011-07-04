@@ -10,8 +10,10 @@ public class Hand {
 	private ArrayList<Trick> playedTricks = new ArrayList<Trick>();
 	private Player[] players;
 	private int trump = -1;
+	private Team[] teams;
 
-	public Hand(Player[] players) {
+	public Hand(Team[] teams, Player[] players) {
+		this.teams = teams;
 		this.players = players;
 	}
 
@@ -72,7 +74,7 @@ public class Hand {
 		return trickWinner;
 	}
 	
-	public Team getHandWinner(Team[] teams) {
+	public Team getHandWinner() {
 		return Hand.getHandWinner(teams, players, getPlayedTricks(), getWinningBid());
 	}
 	
@@ -93,15 +95,18 @@ public class Hand {
 		Team settingTeam = Team.getOtherTeam(teams, bidWinner);
 
 		int biddingTeamPoints = wonPoints.get(bidWinningTeam.getPlayer1()) + wonPoints.get(bidWinningTeam.getPlayer2());
+		int otherTeamPoints = wonPoints.get(settingTeam.getPlayer1()) + wonPoints.get(settingTeam.getPlayer2());
 
 		if (winningBid.enoughPointsToWinBid(biddingTeamPoints))
 			return bidWinningTeam;
-		else
+		else if (winningBid.enoughPointsToSetBid(otherTeamPoints))
 			return settingTeam;
+		
+		return null;
 	}
 
 	public boolean isOver() {
-		return playedTricks.size() == 7;
+		return playedTricks.size() != 0 && getHandWinner() != null;
 	}
 
 	public boolean biddingIsOver() {
@@ -126,5 +131,12 @@ public class Hand {
 	
 	public String toString() {
 		return String.format("Hand - %d is bid, %d is trump, %d tricks have been played", winningBid.getBid(), trump, playedTricks.size());
+	}
+
+	public void completeHand() {
+		for (Player player : players) {
+			player.clearDominosInHand();
+		}
+		
 	}
 }

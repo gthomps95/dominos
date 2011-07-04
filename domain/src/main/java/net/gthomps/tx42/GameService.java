@@ -4,30 +4,34 @@ import net.gthomps.tx42.GameState.State;
 
 public class GameService {
 	private Game game;
+	private PlayValidator playValidator;
+	private GameState currentState;
 	
-	public GameState createNewGame(Player[] players) {
+	public GameState createNewGame(Player[] players, PlayValidator playValidator) {
+		this.playValidator = playValidator;
 		game = new Game(players);
 		Hand hand = game.startNewHand();
 		hand.dealDominos(Domino.getFullDominoSet(), players);
 		
-		return new GameState(State.Bidding, players[0]);
+		return currentState = new GameState(State.Bidding, players[0]);
 	}
 
 	public GameState placeBid(Bid bid) {
+		playValidator.canBid(currentState, bid, game.getCurrentHand().getWinningBid());
 		game.getCurrentHand().addBid(bid);
 		
 		if (!game.getCurrentHand().biddingIsOver())
-			return new GameState(State.Bidding, game.getCurrentHand().getNextBidder());
+			return currentState = new GameState(State.Bidding, game.getCurrentHand().getNextBidder());
 
 		Player bidWinner = game.getCurrentHand().getWinningBid().getPlayer();
-		return new GameState(State.SettingTrump, bidWinner);
+		return currentState = new GameState(State.SettingTrump, bidWinner);
 	}
 	
 	public GameState setTrump(int suit) {
 		game.getCurrentHand().setTrump(suit);
 		Player bidWinner = game.getCurrentHand().getWinningBid().getPlayer();
 		game.getCurrentHand().startNewTrick(bidWinner);
-		return new GameState(State.Playing, bidWinner);
+		return currentState = new GameState(State.Playing, bidWinner);
 	}
 	
 	public GameState playDomino(Player player, Domino domino) {
@@ -35,7 +39,7 @@ public class GameService {
 	
 		// if trick is not over, keep playing
 		if (!game.getCurrentHand().getCurrentTrick().isOver())
-			return new GameState(State.Playing, game.getCurrentHand().getCurrentTrick().getNextPlayer());
+			return currentState = new GameState(State.Playing, game.getCurrentHand().getCurrentTrick().getNextPlayer());
 		
 		// if trick is over, mark it completed
 		Player trickWinner = game.getCurrentHand().completeTrick();
@@ -44,7 +48,7 @@ public class GameService {
 		if (!game.getCurrentHand().isOver()) {
 			game.getCurrentHand().startNewTrick(trickWinner);
 
-			return new GameState(State.Playing, trickWinner);
+			return currentState = new GameState(State.Playing, trickWinner);
 		}
 
 		// complete hand
@@ -55,19 +59,27 @@ public class GameService {
 			Hand hand = game.startNewHand();
 			hand.dealDominos(Domino.getFullDominoSet(), game.getPlayers());
 			
-			return new GameState(State.Bidding, hand.getNextBidder());
+			return currentState = new GameState(State.Bidding, hand.getNextBidder());
 		}
 		
-		return new GameState(State.Over, null);
+		return currentState = new GameState(State.Over, null);
 	}
 	
 	public GameState forfiet(Player player) {
 		Team team = getGame().getOtherTeamForPlayer(player);
 		team.winByForfiet();
-		return new GameState(State.Over, null);
+		return currentState = new GameState(State.Over, null);
 	}
 
 	public Game getGame() {
 		return game;
+	}
+	
+	public PlayValidator getPlayValidator() {
+		return playValidator;
+	}
+
+	public GameState getCurrentState() {
+		return currentState;
 	}
 }

@@ -20,19 +20,6 @@ public class GameTest {
 	}
 
 	@Test
-	public void gameHasWinnerAfterSevenHands() {
-		Game game = new Game(PlayerTest.createFourGenericPlayers());
-		
-		for (int i = 0; i < 7; i++) {
-			game.startNewHand();
-			game.getCurrentHand().addBid(new Bid(game.getPlayers()[0], 30));
-			game.completeHand();
-		}
-		
-		assertTrue(game.hasWinner());
-	}
-	
-	@Test
 	public void handOrderedPlayerHasSecondPlayerFirstForSecondHand() {
 		Player[] players = PlayerTest.createFourGenericPlayers();
 		Game game = new Game(players);

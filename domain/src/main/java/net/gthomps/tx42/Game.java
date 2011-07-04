@@ -40,7 +40,7 @@ public class Game {
 	}
 	
 	protected Hand startNewHand() {
-		return currentHand = new Hand(getHandOrderedPlayers());		
+		return currentHand = new Hand(teams, getHandOrderedPlayers());		
 	}
 	
 	public Player[] getHandOrderedPlayers() {
@@ -49,9 +49,12 @@ public class Game {
 
 	protected void completeHand() {
 		if (currentHand != null) {
+			currentHand.completeHand();
 			playedHands.add(currentHand);
 			
-			currentHand.getHandWinner(teams).addToScore(currentHand.getWinningBid().getMarks());
+			// TODO move this check to a validator
+			if (currentHand.getHandWinner() != null)
+				currentHand.getHandWinner().addToScore(currentHand.getWinningBid().getMarks());
 		}
 		
 		currentHand = null;

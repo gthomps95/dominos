@@ -56,6 +56,14 @@ public class Team {
 		return null;
 	}
 	
+	public static Team[] createTeams(Player[] players) {
+		Team[] teams = new Team[2];
+		teams[0] = new Team(players[0], players[2]);
+		teams[1] = new Team(players[1], players[3]);
+		
+		return teams;
+	}
+	
 	public String toString() {
 		return String.format("%s and %s have %d marks", players[0].toString(), players[1].toString(), score);
 	}

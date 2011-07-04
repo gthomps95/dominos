@@ -27,6 +27,30 @@ public class BidTest {
 	}
 
 	@Test
+	public void enoughPointsToSet() {
+		Player player = new Player("Player 1");
+		Bid bid = new Bid(player, 32);
+		assertTrue(bid.enoughPointsToSetBid(11));
+		assertFalse(bid.enoughPointsToSetBid(10));
+
+		bid = new Bid(player, 30);
+		assertTrue(bid.enoughPointsToSetBid(13));
+		assertFalse(bid.enoughPointsToSetBid(12));
+		
+		bid = new Bid(player, 42);
+		assertTrue(bid.enoughPointsToSetBid(1));
+		assertFalse(bid.enoughPointsToSetBid(0));
+
+		bid = new Bid(player, 84);
+		assertTrue(bid.enoughPointsToSetBid(1));
+		assertFalse(bid.enoughPointsToSetBid(0));
+
+		bid = new Bid(player, 126);
+		assertTrue(bid.enoughPointsToSetBid(1));
+		assertFalse(bid.enoughPointsToSetBid(0));
+	}
+
+	@Test
 	public void testMarks() {
 		Player player = new Player("Player 1");
 

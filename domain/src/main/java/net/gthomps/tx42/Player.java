@@ -45,5 +45,8 @@ public class Player {
 		
 		return orderedPlayers;
 	}
-	
+
+	public void clearDominosInHand() {
+		dominosInHand = new ArrayList<Domino>();
+	}
 }

@@ -34,6 +34,14 @@ public class Bid {
 		return points >= bidPoints;
 	}
 	
+	public boolean enoughPointsToSetBid(int points) {
+		int bidPoints = bid;
+		if ( bid > 42 )
+			bidPoints = 42;
+		
+		return points > 42 - bidPoints;
+	}
+
 	public String toString() {
 		return String.format("%s bid %d", player.toString(), bid);
 	}
