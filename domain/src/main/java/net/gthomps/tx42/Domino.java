@@ -51,4 +51,52 @@ public class Domino {
 		
 		return dominos.toArray(new Domino[dominos.size()]);
 	}
+	
+	public boolean isTrump(int trump) {
+		return getHighSide() == trump || getLowSide() == trump;
+	}
+
+	public boolean beats(int trump, Domino domino) {
+		if ( isTrump(trump) && !domino.isTrump(trump) ) {
+			return true;
+		} else if (!isTrump(trump) && domino.isTrump(trump)) {
+			return false;
+		} else if (isTrump(trump) && domino.isTrump(trump)) {
+			if (domino.getIsDouble())
+				return false;
+			
+			if (domino.getHighSide() == trump && getHighSide() == trump)
+				return getLowSide() > domino.getLowSide();
+				
+			else if (domino.getLowSide() == trump && getLowSide() == trump)
+				return getHighSide() > domino.getHighSide();
+				
+			else if (domino.getLowSide() == trump && getHighSide() == trump)
+				return getLowSide() > domino.getHighSide();
+			
+			else
+				return getHighSide() > domino.getLowSide();
+			
+		} else {
+			if (domino.getIsDouble())
+				return false;
+			
+			if (domino.getHighSide() == getHighSide())
+				return getIsDouble() || domino.getLowSide() < getLowSide();
+				
+			if (domino.getHighSide() == getLowSide())
+				return getIsDouble() || domino.getLowSide() < getHighSide();
+			
+			return false;
+		}
+	}
+	
+	public int getPointCount() {
+		int sum = getLowSide() + getHighSide();
+		
+		if (sum % 5 == 0)
+			return sum;
+		else
+			return 0;
+	}
 }

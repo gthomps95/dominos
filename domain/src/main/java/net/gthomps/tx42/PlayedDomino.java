@@ -17,5 +17,9 @@ public class PlayedDomino {
 	public Domino getDomino() {
 		return domino;
 	}
+	
+	public String toString() {
+		return String.format("%s played %s", player.toString(), domino.toString());
+	}
 
 }

@@ -95,4 +95,50 @@ public class DominoTest {
 		
 		assertEquals(expected, dominos.length);
 	}
+	
+	@Test
+	public void dominoBeatTest() {
+		assertTrue((new Domino(4,2)).beats(0, new Domino(4,1)));
+		assertTrue((new Domino(4,6)).beats(0, new Domino(4,3)));
+		assertFalse((new Domino(4,5)).beats(0, new Domino(4,4)));
+		assertFalse((new Domino(3,2)).beats(0, new Domino(4,1)));
+		assertFalse((new Domino(4,6)).beats(0, new Domino(4,4)));
+	}
+	
+	@Test
+	public void trumpBeatsNonTrump() {
+		assertTrue((new Domino(4,2).beats(2, new Domino(4,4))));
+	}
+	
+	@Test
+	public void nonTrumpDoesNotBeatTrump() {
+		assertFalse((new Domino(4,4).beats(2, new Domino(4,2))));
+	}
+	
+	@Test
+	public void higherTrumpBeatsLowerTrump() {
+		assertTrue((new Domino(4,2).beats(2, new Domino(3,2))));
+		assertTrue((new Domino(6,2).beats(6, new Domino(6,1))));
+		assertTrue((new Domino(6,3).beats(3, new Domino(3,1))));
+		assertTrue((new Domino(3,2).beats(3, new Domino(3,1))));
+	}
+	
+	@Test
+	public void lowerTrumpDoesNotBeatHigherTrump() {
+		assertFalse((new Domino(3,2).beats(2, new Domino(4,2))));
+		assertFalse((new Domino(6,1).beats(6, new Domino(6,2))));
+		assertFalse((new Domino(1,3).beats(3, new Domino(3,6))));
+		assertFalse((new Domino(3,1).beats(3, new Domino(3,2))));
+	}
+	
+	@Test
+	public void countTest() {
+		assertEquals(10, (new Domino(5,5)).getPointCount());
+		assertEquals(10, (new Domino(6,4)).getPointCount());
+		assertEquals(5, (new Domino(5,0)).getPointCount());
+		assertEquals(5, (new Domino(4,1)).getPointCount());
+		assertEquals(5, (new Domino(3,2)).getPointCount());
+		assertEquals(0, (new Domino(6,3)).getPointCount());
+		assertEquals(0, (new Domino(5,1)).getPointCount());
+	}
 }

@@ -18,4 +18,23 @@ public class Bid {
 		this.player = player;
 		this.bid = bid;		
 	}
+	
+	public int getMarks() {
+		if ( bid < 42 )
+			return 1;
+		else 
+			return bid / 42;
+	}
+
+	public boolean enoughPointsToWinBid(int points) {
+		int bidPoints = bid;
+		if ( bid > 42 )
+			bidPoints = 42;
+		
+		return points >= bidPoints;
+	}
+	
+	public String toString() {
+		return String.format("%s bid %d", player.toString(), bid);
+	}
 }
