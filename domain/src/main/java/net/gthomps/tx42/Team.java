@@ -1,8 +1,11 @@
 package net.gthomps.tx42;
 
+import org.apache.commons.lang.ArrayUtils;
+
 public class Team {
 	private Player[] players = new Player[2];
 	private int score = 0;
+	private boolean winByForfiet = false;
 	
 	public Team(Player player1, Player player2) {
 		players[0] = player1;
@@ -18,15 +21,15 @@ public class Team {
 	}
 
 	public boolean containsPlayer(Player player) {
-		return players[0].equals(player) || players[1].equals(player);
+		return ArrayUtils.contains(players, player);
 	}
 	
-	public void addToScore(int marks) {
+	protected void addToScore(int marks) {
 		score += marks;
 	}
 	
 	public boolean isWinner() {
-		return score >= 7;
+		return winByForfiet || score >= 7;
 	}
 	
 	public int getScore() {
@@ -55,5 +58,9 @@ public class Team {
 	
 	public String toString() {
 		return String.format("%s and %s have %d marks", players[0].toString(), players[1].toString(), score);
+	}
+
+	protected void winByForfiet() {
+		winByForfiet = true;
 	}
 }

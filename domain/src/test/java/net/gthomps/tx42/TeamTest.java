@@ -56,4 +56,13 @@ public class TeamTest {
 		
 		assertFalse(team.isWinner());
 	}
+	
+	@Test
+	public void testWinByForfiet() {
+		Team team = createTeam();
+		assertFalse(team.isWinner());
+		
+		team.winByForfiet();
+		assertTrue(team.isWinner());
+	}
 }

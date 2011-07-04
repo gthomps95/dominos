@@ -15,7 +15,7 @@ public class Hand {
 		this.players = players;
 	}
 
-	public void dealDominos(Domino[] fullDominoSet, Player[] players) {
+	protected void dealDominos(Domino[] fullDominoSet, Player[] players) {
 		ArrayList<Domino> dominos = new ArrayList<Domino>();
 		for (Domino d: fullDominoSet)
 			dominos.add(d);
@@ -32,7 +32,7 @@ public class Hand {
 		}		
 	}
 	
-	public void addBid(Bid bid) {
+	protected void addBid(Bid bid) {
 		bids.add(bid);
 
 		checkForWinningBid(bid);	
@@ -51,33 +51,19 @@ public class Hand {
 		return winningBid;
 	}
 
-	public Player[] getTrickOrderedPlayers(Player firstPlayer) {
-		Player[] trickOrderedPlayers = new Player[4];
-
-		int playerIndex = 0;
-		for (; playerIndex < 4; playerIndex++)
-			if (players[playerIndex].equals(firstPlayer))
-				break;
-		
-		for (int i = 0; i < 4; i++)
-			trickOrderedPlayers[i] = players[(i + playerIndex) % 4];
-		
-		return trickOrderedPlayers;
-	}
-
 	public Trick getCurrentTrick() {
 		return currentTrick;
 	}
 
-	public Trick startNewTrick(Player firstPlayer) {
-		return currentTrick = new Trick(getTrickOrderedPlayers(firstPlayer), getTrump());
+	protected Trick startNewTrick(Player firstPlayer) {
+		return currentTrick = new Trick(Player.getReorderedPlayers(players, firstPlayer), getTrump());
 	}
 
 	public ArrayList<Trick> getPlayedTricks() {
 		return playedTricks;
 	}
 
-	public Player completeTrick() {
+	protected Player completeTrick() {
 		if (currentTrick != null) 
 			playedTricks.add(currentTrick);
 		
@@ -134,7 +120,7 @@ public class Hand {
 		return trump;
 	}
 	
-	public void setTrump(int suit) {
+	protected void setTrump(int suit) {
 		trump = suit;
 	}
 	

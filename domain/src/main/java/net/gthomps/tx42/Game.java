@@ -22,6 +22,10 @@ public class Game {
 	public Team getTeam2() {
 		return teams[1];
 	}
+
+	public Team getOtherTeamForPlayer(Player player) {
+		return Team.getOtherTeam(teams, player);
+	}
 	
 	public Team getTeamForPlayer(Player player) {
 		return Team.getTeam(teams, player);
@@ -35,20 +39,15 @@ public class Game {
 		return currentHand;
 	}
 	
-	public Hand startNewHand() {
+	protected Hand startNewHand() {
 		return currentHand = new Hand(getHandOrderedPlayers());		
 	}
 	
 	public Player[] getHandOrderedPlayers() {
-		Player[] handOrderedPlayers = new Player[4];
-		
-		for (int i = 0; i < 4; i++)
-			handOrderedPlayers[i] = players[(i + playedHands.size()) % 4];
-		
-		return handOrderedPlayers;
+		return Player.getReorderedPlayers(players, players[playedHands.size() % 4]);
 	}
 
-	public void completeHand() {
+	protected void completeHand() {
 		if (currentHand != null) {
 			playedHands.add(currentHand);
 			

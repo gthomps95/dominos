@@ -4,10 +4,8 @@ import net.gthomps.tx42.GameState.State;
 
 public class GameService {
 	private Game game;
-
 	
-	public GameState createNewGame() {
-		Player[] players = Player.createFourGenericPlayers();
+	public GameState createNewGame(Player[] players) {
 		game = new Game(players);
 		Hand hand = game.startNewHand();
 		hand.dealDominos(Domino.getFullDominoSet(), players);
@@ -64,6 +62,8 @@ public class GameService {
 	}
 	
 	public GameState forfiet(Player player) {
+		Team team = getGame().getOtherTeamForPlayer(player);
+		team.winByForfiet();
 		return new GameState(State.Over, null);
 	}
 

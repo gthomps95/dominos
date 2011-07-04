@@ -9,34 +9,40 @@ import org.junit.Test;
 public class GameServiceTest {
 	private final GameService service = new GameService();
 	
+	// TODO add UI
+	// TODO add play validation
+	// TODO add bid AI
+	// TODO add play AI
+	// TODO add short circuit hand
+	
 	@Test
 	public void newGameHasFourPlayers() {
-		service.createNewGame();
+		service.createNewGame(PlayerTest.createFourGenericPlayers());
 		assertEquals(4, service.getGame().getPlayers().length);
 	}
 
 	@Test
 	public void newGameHasCurrentHand() {
-		service.createNewGame();
+		service.createNewGame(PlayerTest.createFourGenericPlayers());
 		assertNotNull(service.getGame().getCurrentHand());
 	}
 
 	@Test
 	public void newGamePlayersHaveSevenDominos() {
-		service.createNewGame();
+		service.createNewGame(PlayerTest.createFourGenericPlayers());
 		assertEquals(7, service.getGame().getPlayers()[0].getDominosInHand().size());
 	}
 	
 	@Test
 	public void newGameReturnsCorrectState() {
-		GameState state = service.createNewGame();
+		GameState state = service.createNewGame(PlayerTest.createFourGenericPlayers());
 		assertEquals(State.Bidding, state.getState());
 		assertEquals(service.getGame().getPlayers()[0], state.getNextPlayer());		
 	}
 
 	@Test
 	public void addOneBidAddsBidAndReturnsCorrectState() {
-		service.createNewGame();
+		service.createNewGame(PlayerTest.createFourGenericPlayers());
 		Bid bid = new Bid(service.getGame().getPlayers()[0], Bid.PASS);
 		
 		GameState state = service.placeBid(bid);
@@ -48,17 +54,17 @@ public class GameServiceTest {
 
 	private Bid[] createFourBids(Player[] players) {
 		Bid[] bids = new Bid[4];
-		bids[0] = new Bid(service.getGame().getPlayers()[0], Bid.PASS);
-		bids[1] = new Bid(service.getGame().getPlayers()[1], Bid.PASS);
-		bids[2] = new Bid(service.getGame().getPlayers()[2], Bid.PASS);
-		bids[3] = new Bid(service.getGame().getPlayers()[3], 30);
+		bids[0] = new Bid(players[0], Bid.PASS);
+		bids[1] = new Bid(players[1], Bid.PASS);
+		bids[2] = new Bid(players[2], Bid.PASS);
+		bids[3] = new Bid(players[3], 30);
 		
 		return bids;
 	}
 	
 	@Test
 	public void addingFourBidsDeclaresBidWinner() {
-		service.createNewGame();
+		service.createNewGame(PlayerTest.createFourGenericPlayers());
 		
 		Bid[] bids = createFourBids(service.getGame().getPlayers());
 		placeBids(bids);
@@ -76,7 +82,7 @@ public class GameServiceTest {
 	
 	@Test
 	public void addingFourBidsAndSettingTrumpCausesNewTrick() {
-		service.createNewGame();
+		service.createNewGame(PlayerTest.createFourGenericPlayers());
 		
 		Bid[] bids = createFourBids(service.getGame().getPlayers());
 		placeBids(bids);
@@ -88,7 +94,7 @@ public class GameServiceTest {
 	
 	@Test
 	public void addingFourBidsWithWinnerSetsCorrectNextPlayer() {
-		service.createNewGame();
+		service.createNewGame(PlayerTest.createFourGenericPlayers());
 		
 		Bid[] bids = createFourBids(service.getGame().getPlayers());
 		GameState state = placeBids(bids);
@@ -98,7 +104,7 @@ public class GameServiceTest {
 	
 	@Test
 	public void addingFourDominosCausesPlayedTricksCountToIncrease() {
-		service.createNewGame();
+		service.createNewGame(PlayerTest.createFourGenericPlayers());
 
 		Bid[] bids = createFourBids(service.getGame().getPlayers());
 		placeBids(bids);
@@ -112,7 +118,7 @@ public class GameServiceTest {
 
 	@Test
 	public void playingAllDominosCausesPlayedHandsCountToIncrease() {
-		service.createNewGame();
+		service.createNewGame(PlayerTest.createFourGenericPlayers());
 
 		Bid[] bids = createFourBids(service.getGame().getPlayers());
 		placeBids(bids);
@@ -127,8 +133,19 @@ public class GameServiceTest {
 	}
 	
 	@Test
+	public void testForfeit() {
+		Player[] players = PlayerTest.createFourGenericPlayers();
+		
+		service.createNewGame(players);
+		assertNull(service.getGame().getWinner());
+
+		service.forfiet(service.getGame().getTeam1().getPlayer1());
+		assertEquals(service.getGame().getTeam2(), service.getGame().getWinner());
+	}
+	
+	@Test
 	public void playFullGame() {
-		GameState state = service.createNewGame();
+		GameState state = service.createNewGame(PlayerTest.createFourGenericPlayers());
 		assertEquals(State.Bidding, state.getState());
 		assertFalse(service.getGame().hasWinner());
 
@@ -136,8 +153,7 @@ public class GameServiceTest {
 			assertFalse(service.getGame().getCurrentHand().isOver());
 			assertFalse(service.getGame().hasWinner());
 
-			// TODO set create bidding order
-			Bid[] bids = createFourBids(service.getGame().getPlayers());
+			Bid[] bids = createFourBids(service.getGame().getHandOrderedPlayers());
 			state = placeBids(bids);
 			
 			assertEquals(-1, service.getGame().getCurrentHand().getTrump());			

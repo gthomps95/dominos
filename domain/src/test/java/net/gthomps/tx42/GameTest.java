@@ -8,7 +8,7 @@ public class GameTest {
 	
 	@Test
 	public void gameDoesNotHaveWinnerAfterSixHands() {
-		Game game = new Game(Player.createFourGenericPlayers());
+		Game game = new Game(PlayerTest.createFourGenericPlayers());
 		
 		for (int i = 0; i < 6; i++) {
 			game.startNewHand();
@@ -21,7 +21,7 @@ public class GameTest {
 
 	@Test
 	public void gameHasWinnerAfterSevenHands() {
-		Game game = new Game(Player.createFourGenericPlayers());
+		Game game = new Game(PlayerTest.createFourGenericPlayers());
 		
 		for (int i = 0; i < 7; i++) {
 			game.startNewHand();
@@ -34,7 +34,7 @@ public class GameTest {
 	
 	@Test
 	public void handOrderedPlayerHasSecondPlayerFirstForSecondHand() {
-		Player[] players = Player.createFourGenericPlayers();
+		Player[] players = PlayerTest.createFourGenericPlayers();
 		Game game = new Game(players);
 		game.startNewHand();
 		assertEquals(players[0], game.getHandOrderedPlayers()[0]);

@@ -9,7 +9,7 @@ public class TrickTest {
 	
 	@Test
 	public void playedDominoIsInList() {
-		Trick trick = new Trick(Player.createFourGenericPlayers(), 0);
+		Trick trick = new Trick(PlayerTest.createFourGenericPlayers(), 0);
 		PlayedDomino playedDomino = playDomino(trick);
 		
 		assertTrue(trick.getPlayedDominos().contains(playedDomino));
@@ -25,7 +25,7 @@ public class TrickTest {
 	
 	@Test
 	public void trickIsNotOverAfterThreeDominosPlayed() {
-		Trick trick = new Trick(Player.createFourGenericPlayers(), 0);
+		Trick trick = new Trick(PlayerTest.createFourGenericPlayers(), 0);
 		
 		for (int i = 0; i < 3; i++)
 			playDomino(trick);
@@ -35,7 +35,7 @@ public class TrickTest {
 
 	@Test
 	public void trickIsOverAfterFourDominosPlayed() {
-		Trick trick = new Trick(Player.createFourGenericPlayers(), 0);
+		Trick trick = new Trick(PlayerTest.createFourGenericPlayers(), 0);
 		
 		for (int i = 0; i < 4; i++)
 			playDomino(trick);
@@ -45,7 +45,7 @@ public class TrickTest {
 	
 	@Test
 	public void trickHasCorrectNextPlayer() {
-		Player[] players = Player.createFourGenericPlayers();
+		Player[] players = PlayerTest.createFourGenericPlayers();
 		Trick trick = new Trick(players, 0);
 		
 		assertEquals(players[0], trick.getNextPlayer());
@@ -55,7 +55,7 @@ public class TrickTest {
 	
 	@Test
 	public void testTrickPoints() {
-		Player[] players = Player.createFourGenericPlayers();
+		Player[] players = PlayerTest.createFourGenericPlayers();
 		Trick trick = new Trick(players, 0);
 		
 		trick.playDomino(new PlayedDomino(players[0], new Domino(5,5)));
@@ -68,7 +68,7 @@ public class TrickTest {
 	
 	@Test
 	public void trumpWins() {
-		Player[] players = Player.createFourGenericPlayers();
+		Player[] players = PlayerTest.createFourGenericPlayers();
 		Trick trick = new Trick(players, 0);
 		
 		trick.playDomino(new PlayedDomino(players[0], new Domino(5,5)));

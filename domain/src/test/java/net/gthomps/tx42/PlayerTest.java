@@ -35,4 +35,25 @@ public class PlayerTest {
 		player.playDomino(domino);
 		assertFalse(player.getDominosInHand().contains(domino));
 	}
+	
+	public static Player[] createFourGenericPlayers() {
+		Player[] players = new Player[4];
+		players[0] = new Player("Player 1");
+		players[1] = new Player("Player 2");
+		players[2] = new Player("Player 3");
+		players[3] = new Player("Player 4");
+		
+		return players;
+	}
+	
+	@Test
+	public void secondPlayerIsFirstPlayerAfterSetOrder() {
+		Player[] players = createFourGenericPlayers();
+		Player[] newOrderedPlayers = Player.getReorderedPlayers(players, players[1]);
+		
+		assertEquals(players[1], newOrderedPlayers[0]);
+		assertEquals(players[2], newOrderedPlayers[1]);
+		assertEquals(players[3], newOrderedPlayers[2]);
+		assertEquals(players[0], newOrderedPlayers[3]);
+	}
 }

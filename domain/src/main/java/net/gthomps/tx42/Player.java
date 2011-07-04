@@ -2,6 +2,8 @@ package net.gthomps.tx42;
 
 import java.util.ArrayList;
 
+import org.apache.commons.lang.ArrayUtils;
+
 public class Player {
 	private String name;
 	private ArrayList<Domino> dominosInHand;
@@ -19,28 +21,29 @@ public class Player {
 		return dominosInHand;
 	}
 	
-	public void addDominoToHand(Domino domino) {
+	protected void addDominoToHand(Domino domino) {
 		dominosInHand.add(domino);
 	}
 		
-	public void addDominosToHand(ArrayList<Domino> dominos) {
+	protected void addDominosToHand(ArrayList<Domino> dominos) {
 		dominosInHand.addAll(dominos);
 	}
 	
-	public PlayedDomino playDomino(Domino domino) {
+	protected PlayedDomino playDomino(Domino domino) {
 		dominosInHand.remove(domino);
 
 		return new PlayedDomino(this, domino);
 	}
 	
-	public static Player[] createFourGenericPlayers() {
-		Player[] players = new Player[4];
-		players[0] = new Player("Player 1");
-		players[1] = new Player("Player 2");
-		players[2] = new Player("Player 3");
-		players[3] = new Player("Player 4");
+	public static Player[] getReorderedPlayers(Player[] players, Player firstPlayer) {
+		Player[] orderedPlayers = new Player[4];
+
+		int playerIndex = ArrayUtils.indexOf(players, firstPlayer);
 		
-		return players;
+		for (int i = 0; i < 4; i++)
+			orderedPlayers[i] = players[(i + playerIndex) % 4];
+		
+		return orderedPlayers;
 	}
 	
 }

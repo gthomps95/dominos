@@ -9,7 +9,7 @@ public class Trick {
 	private Player[] players;
 	private int trump;
 	
-	public Trick(Player[] players, int trump) {
+	protected Trick(Player[] players, int trump) {
 		this.players = players;
 		this.trump = trump;
 	}
@@ -18,7 +18,7 @@ public class Trick {
 		return playedDominos;
 	}
 
-	public void playDomino(PlayedDomino playedDomino) {
+	protected void playDomino(PlayedDomino playedDomino) {
 		if (playedDominos.size() == 0) {
 			winningPlayedDomino = playedDomino;
 		} else if (playedDomino.getDomino().beats(trump, winningPlayedDomino.getDomino())) {
