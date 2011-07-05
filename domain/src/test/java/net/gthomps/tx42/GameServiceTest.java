@@ -3,10 +3,9 @@ package net.gthomps.tx42;
 import static org.junit.Assert.*;
 
 import net.gthomps.tx42.GameState.State;
-import net.gthomps.tx42.ai.BidMaker;
-import net.gthomps.tx42.ai.PlayMaker;
-import net.gthomps.tx42.ai.SimpleBidMaker;
-import net.gthomps.tx42.ai.SimplePlayMaker;
+import net.gthomps.tx42.ai.PlayChooser;
+import net.gthomps.tx42.ai.SimpleBidChooser;
+import net.gthomps.tx42.ai.SimpleDominoChoose;
 import net.gthomps.tx42.validation.BidValidator;
 import net.gthomps.tx42.validation.BidValidator42;
 import net.gthomps.tx42.validation.PlayValidator;
@@ -147,8 +146,8 @@ public class GameServiceTest {
 
 			Player[] biddingPlayers = service.getGame().getHandOrderedPlayers();
 			for (Player player : biddingPlayers) {
-				BidMaker bidMaker = new SimpleBidMaker();
-				Bid bid = bidMaker.makeBid(service.getGame(), player);
+				PlayChooser<Bid> bidChooser = new SimpleBidChooser();
+				Bid bid = bidChooser.choose(service.getGame(), player);
 				state = service.placeBid(bid);
 			}
 			
@@ -162,8 +161,8 @@ public class GameServiceTest {
 			assertFalse(service.getGame().getCurrentHand().getCurrentTrick().isOver());
 	
 			while (state.getState().equals(State.Playing)) {
-				PlayMaker playMaker = new SimplePlayMaker();
-				Domino domino = playMaker.chooseDomino(service.getGame(), state.getNextPlayer());
+				PlayChooser<Domino> chooser = new SimpleDominoChoose();
+				Domino domino = chooser.choose(service.getGame(), state.getNextPlayer());
 				state = service.playDomino(state.getNextPlayer(), domino);
 			}
 		}

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import net.gthomps.tx42.GameState.State;
 import net.gthomps.tx42.validation.BidValidator;
 import net.gthomps.tx42.validation.PlayValidator;
-import net.gthomps.tx42.validation.ValidatorException;
 
 public class GameService {
 	private Game game;
@@ -23,7 +22,7 @@ public class GameService {
 		return currentState = new GameState(State.Bidding, players[0]);
 	}
 
-	public GameState placeBid(Bid bid) throws ValidatorException {
+	public GameState placeBid(Bid bid) {
 		ArrayList<String> messages = bidValidator.canBid(currentState, bid, game.getCurrentHand().getWinningBid(), game.getCurrentHand().getBids());
 		if (!messages.isEmpty()) 
 			return new GameState(currentState.getState(), currentState.getNextPlayer(), messages);
@@ -51,7 +50,7 @@ public class GameService {
 		return currentState = new GameState(State.Playing, bidWinner, String.format("%s set trump of %d", bidWinner, suit));
 	}
 	
-	public GameState playDomino(Player player, Domino domino) throws ValidatorException {
+	public GameState playDomino(Player player, Domino domino) {
 		ArrayList<String> messages = playValidator.canPlay(currentState, player, game.getCurrentHand().getCurrentTrick().getLedDomino(), domino, game.getCurrentHand().getTrump());
 		if (!messages.isEmpty()) 
 			return new GameState(currentState.getState(), currentState.getNextPlayer(), messages);

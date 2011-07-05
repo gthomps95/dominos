@@ -23,7 +23,7 @@ public class Trick {
 		if (playedDominos.size() == 0) {
 			ledDomino = playedDomino.getDomino();
 			winningPlayedDomino = playedDomino;
-		} else if (playedDomino.getDomino().beats(trump, winningPlayedDomino.getDomino())) {
+		} else if (playedDomino.getDomino().beats(getLedDomino(), trump, winningPlayedDomino.getDomino())) {
 			winningPlayedDomino = playedDomino;			
 		}
 				

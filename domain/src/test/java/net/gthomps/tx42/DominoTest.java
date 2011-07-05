@@ -98,37 +98,37 @@ public class DominoTest {
 	
 	@Test
 	public void dominoBeatTest() {
-		assertTrue((new Domino(4,2)).beats(0, new Domino(4,1)));
-		assertTrue((new Domino(4,6)).beats(0, new Domino(4,3)));
-		assertFalse((new Domino(4,5)).beats(0, new Domino(4,4)));
-		assertFalse((new Domino(3,2)).beats(0, new Domino(4,1)));
-		assertFalse((new Domino(4,6)).beats(0, new Domino(4,4)));
+		assertTrue((new Domino(4,2)).beats(4, 0, new Domino(4,1)));
+		assertTrue((new Domino(4,6)).beats(4, 0, new Domino(4,3)));
+		assertFalse((new Domino(4,5)).beats(4, 0, new Domino(4,4)));
+		assertFalse((new Domino(3,2)).beats(4, 0, new Domino(4,1)));
+		assertFalse((new Domino(4,6)).beats(4, 0, new Domino(4,4)));
 	}
 	
 	@Test
 	public void trumpBeatsNonTrump() {
-		assertTrue((new Domino(4,2).beats(2, new Domino(4,4))));
+		assertTrue((new Domino(4,2).beats(4, 2, new Domino(4,4))));
 	}
 	
 	@Test
 	public void nonTrumpDoesNotBeatTrump() {
-		assertFalse((new Domino(4,4).beats(2, new Domino(4,2))));
+		assertFalse((new Domino(4,4).beats(4, 2, new Domino(4,2))));
 	}
 	
 	@Test
 	public void higherTrumpBeatsLowerTrump() {
-		assertTrue((new Domino(4,2).beats(2, new Domino(3,2))));
-		assertTrue((new Domino(6,2).beats(6, new Domino(6,1))));
-		assertTrue((new Domino(6,3).beats(3, new Domino(3,1))));
-		assertTrue((new Domino(3,2).beats(3, new Domino(3,1))));
+		assertTrue((new Domino(4,2).beats(4, 2, new Domino(3,2))));
+		assertTrue((new Domino(6,2).beats(6, 6, new Domino(6,1))));
+		assertTrue((new Domino(6,3).beats(3, 3, new Domino(3,1))));
+		assertTrue((new Domino(3,2).beats(3, 3, new Domino(3,1))));
 	}
 	
 	@Test
 	public void lowerTrumpDoesNotBeatHigherTrump() {
-		assertFalse((new Domino(3,2).beats(2, new Domino(4,2))));
-		assertFalse((new Domino(6,1).beats(6, new Domino(6,2))));
-		assertFalse((new Domino(1,3).beats(3, new Domino(3,6))));
-		assertFalse((new Domino(3,1).beats(3, new Domino(3,2))));
+		assertFalse((new Domino(3,2).beats(2, 2, new Domino(4,2))));
+		assertFalse((new Domino(6,1).beats(6, 6, new Domino(6,2))));
+		assertFalse((new Domino(1,3).beats(3, 3, new Domino(3,6))));
+		assertFalse((new Domino(3,1).beats(3, 3, new Domino(3,2))));
 	}
 	
 	@Test
@@ -171,6 +171,31 @@ public class DominoTest {
 		Domino ledDomino = new Domino(3,0);
 		Domino domino = new Domino(0,0);
 		
-		assertTrue(domino.beats(0, ledDomino));
+		assertTrue(domino.beats(4, 0, ledDomino));
+	}
+
+	@Test
+	public void testDoubleWins() {
+		Domino winningDomino = new Domino(4,2);
+		Domino domino = new Domino(2,2);
+		
+		assertTrue(domino.beats(2, 6, winningDomino));
+	}
+	
+	@Test 
+	public void testLedDomino() {
+		Domino ledDomino = new Domino(2,0);
+		Domino winningDomino = new Domino(4,2);
+		Domino doubleDomino = new Domino(2,2);
+		
+		assertTrue(doubleDomino.beats(ledDomino, 6, winningDomino));
+	}
+	
+	@Test
+	public void testFollowsSuit() {
+		Domino ledDomino = new Domino(6,3);
+		Domino trumpDomino = new Domino(6,1);
+		
+		assertFalse(trumpDomino.followsSuit(ledDomino, 1));
 	}
 }

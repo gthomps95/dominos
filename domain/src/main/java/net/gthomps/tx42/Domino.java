@@ -56,7 +56,15 @@ public class Domino implements Comparable<Domino> {
 		return getHighSide() == trump || getLowSide() == trump;
 	}
 
-	public boolean beats(int trump, Domino domino) {
+	public boolean beats(Domino ledDomino, int trump, Domino domino) {
+		if (ledDomino.isTrump(trump))
+			return beats(trump, trump, domino);
+		else
+			return beats(ledDomino.getHighSide(), trump, domino);
+		
+	}
+	
+	public boolean beats(int suit, int trump, Domino domino) {
 		if ( isTrump(trump) && !domino.isTrump(trump) ) {
 			return true;
 		} else if (!isTrump(trump) && domino.isTrump(trump)) {
@@ -84,10 +92,10 @@ public class Domino implements Comparable<Domino> {
 			if (domino.getIsDouble())
 				return false;
 			
-			if (domino.getHighSide() == getHighSide())
+			if (suit == getHighSide())
 				return getIsDouble() || domino.getLowSide() < getLowSide();
 				
-			if (domino.getHighSide() == getLowSide())
+			if (suit == getLowSide())
 				return getIsDouble() || domino.getLowSide() < getHighSide();
 			
 			return false;
@@ -106,6 +114,9 @@ public class Domino implements Comparable<Domino> {
 	public boolean followsSuit(Domino ledDomino, int trump) {
 		if (ledDomino.isTrump(trump))
 			return isTrump(trump);
+		
+		if (isTrump(trump))
+			return false;
 		
 		return ledDomino.getHighSide() == getHighSide() || ledDomino.getHighSide() == getLowSide();
 	}
