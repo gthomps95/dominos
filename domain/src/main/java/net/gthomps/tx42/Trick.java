@@ -8,6 +8,7 @@ public class Trick {
 	
 	private Player[] players;
 	private int trump;
+	private Domino ledDomino;
 	
 	protected Trick(Player[] players, int trump) {
 		this.players = players;
@@ -20,6 +21,7 @@ public class Trick {
 
 	protected void playDomino(PlayedDomino playedDomino) {
 		if (playedDominos.size() == 0) {
+			ledDomino = playedDomino.getDomino();
 			winningPlayedDomino = playedDomino;
 		} else if (playedDomino.getDomino().beats(trump, winningPlayedDomino.getDomino())) {
 			winningPlayedDomino = playedDomino;			
@@ -58,5 +60,9 @@ public class Trick {
 
 	public int getTrump() {
 		return trump;
+	}
+
+	public Domino getLedDomino() {
+		return ledDomino;
 	}
 }

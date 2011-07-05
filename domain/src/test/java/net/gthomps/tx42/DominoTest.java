@@ -141,4 +141,28 @@ public class DominoTest {
 		assertEquals(0, (new Domino(6,3)).getPointCount());
 		assertEquals(0, (new Domino(5,1)).getPointCount());
 	}
+	
+	@Test
+	public void followsSuitTest() {
+		Domino ledDomino = new Domino(5,4);
+
+		assertTrue((new Domino(3,5)).followsSuit(ledDomino, 0));
+		assertTrue((new Domino(6,5)).followsSuit(ledDomino, 0));
+		assertFalse((new Domino(4,3)).followsSuit(ledDomino, 0));
+	}
+
+	@Test
+	public void followsSuitTrumpTest() {
+		Domino ledDomino = new Domino(4,6);
+
+		assertTrue((new Domino(3,4)).followsSuit(ledDomino, 4));
+		assertTrue((new Domino(4,5)).followsSuit(ledDomino, 4));
+		assertFalse((new Domino(5,3)).followsSuit(ledDomino, 4));
+	}
+	
+	@Test
+	public void testEquals() {
+		assertTrue((new Domino(4,2)).equals(new Domino(2,4)));
+		assertFalse((new Domino(4,2)).equals(new Domino(1,4)));
+	}
 }

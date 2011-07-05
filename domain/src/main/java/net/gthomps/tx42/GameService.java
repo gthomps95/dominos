@@ -1,13 +1,20 @@
 package net.gthomps.tx42;
 
+import java.util.ArrayList;
+
 import net.gthomps.tx42.GameState.State;
+import net.gthomps.tx42.validation.BidValidator;
+import net.gthomps.tx42.validation.PlayValidator;
+import net.gthomps.tx42.validation.ValidatorException;
 
 public class GameService {
 	private Game game;
+	private BidValidator bidValidator;
 	private PlayValidator playValidator;
 	private GameState currentState;
 	
-	public GameState createNewGame(Player[] players, PlayValidator playValidator) {
+	public GameState createNewGame(Player[] players, BidValidator bidValidator, PlayValidator playValidator) {
+		this.bidValidator = bidValidator;
 		this.playValidator = playValidator;
 		game = new Game(players);
 		Hand hand = game.startNewHand();
@@ -16,8 +23,11 @@ public class GameService {
 		return currentState = new GameState(State.Bidding, players[0]);
 	}
 
-	public GameState placeBid(Bid bid) {
-		playValidator.canBid(currentState, bid, game.getCurrentHand().getWinningBid());
+	public GameState placeBid(Bid bid) throws ValidatorException {
+		ArrayList<String> messages = bidValidator.canBid(currentState, bid, game.getCurrentHand().getWinningBid(), game.getCurrentHand().getBids());
+		if (!messages.isEmpty()) 
+			throw new ValidatorException(messages);
+
 		game.getCurrentHand().addBid(bid);
 		
 		if (!game.getCurrentHand().biddingIsOver())
@@ -34,7 +44,11 @@ public class GameService {
 		return currentState = new GameState(State.Playing, bidWinner);
 	}
 	
-	public GameState playDomino(Player player, Domino domino) {
+	public GameState playDomino(Player player, Domino domino) throws ValidatorException {
+		ArrayList<String> messages = playValidator.canPlay(currentState, player, game.getCurrentHand().getCurrentTrick().getLedDomino(), domino, game.getCurrentHand().getTrump());
+		if (!messages.isEmpty()) 
+			throw new ValidatorException(messages);
+
 		game.getCurrentHand().getCurrentTrick().playDomino(player.playDomino(domino));		
 	
 		// if trick is not over, keep playing
@@ -75,8 +89,8 @@ public class GameService {
 		return game;
 	}
 	
-	public PlayValidator getPlayValidator() {
-		return playValidator;
+	public BidValidator getPlayValidator() {
+		return bidValidator;
 	}
 
 	public GameState getCurrentState() {

@@ -56,6 +56,7 @@ public class Domino {
 		return getHighSide() == trump || getLowSide() == trump;
 	}
 
+	// TODO does 0:0 beat 0:3 if trump is zero
 	public boolean beats(int trump, Domino domino) {
 		if ( isTrump(trump) && !domino.isTrump(trump) ) {
 			return true;
@@ -98,5 +99,16 @@ public class Domino {
 			return sum;
 		else
 			return 0;
+	}
+
+	public boolean followsSuit(Domino ledDomino, int trump) {
+		if (ledDomino.isTrump(trump))
+			return isTrump(trump);
+		
+		return ledDomino.getHighSide() == getHighSide() || ledDomino.getHighSide() == getLowSide();
+	}
+	
+	public boolean equals(Domino rhs) {
+		return getHighSide() == rhs.getHighSide() && getLowSide() == rhs.getLowSide();
 	}
 }

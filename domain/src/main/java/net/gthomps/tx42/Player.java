@@ -29,6 +29,10 @@ public class Player {
 		dominosInHand.addAll(dominos);
 	}
 	
+	public void addDominosToHandForTesting(ArrayList<Domino> dominos) {
+		addDominosToHand(dominos);
+	}
+	
 	protected PlayedDomino playDomino(Domino domino) {
 		dominosInHand.remove(domino);
 

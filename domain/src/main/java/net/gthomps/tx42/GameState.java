@@ -28,18 +28,12 @@ public class GameState {
 		return String.format("%s is %s", nextPlayer.toString(), state.toString());
 	}
 	
-	public String checkState(State testState) {
-		if (!getState().equals(State.Bidding))
-			return String.format("Current state is %s.  It is not %s", getState().toString(), State.Bidding.toString());
-		
-		return null;
+	public boolean checkState(State testState) {
+		return getState().equals(testState);
 	}
 	
-	public String checkNextPlayer(Player player) {
-		if (!player.equals(getNextPlayer()))
-			return String.format("Current player is %s.  It is not %s", getNextPlayer().toString(), player.toString());
-		
-		return null;
+	public boolean checkNextPlayer(Player player) {
+		return player.equals(getNextPlayer());
 	}
 
 
