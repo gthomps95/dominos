@@ -1,6 +1,7 @@
 package net.gthomps.tx42;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import org.apache.commons.lang.ArrayUtils;
 
@@ -23,10 +24,12 @@ public class Player {
 	
 	protected void addDominoToHand(Domino domino) {
 		dominosInHand.add(domino);
+		Collections.sort(dominosInHand);
 	}
 		
 	protected void addDominosToHand(ArrayList<Domino> dominos) {
 		dominosInHand.addAll(dominos);
+		Collections.sort(dominosInHand);
 	}
 	
 	public void addDominosToHandForTesting(ArrayList<Domino> dominos) {

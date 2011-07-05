@@ -65,7 +65,7 @@ public class Team {
 	}
 	
 	public String toString() {
-		return String.format("%s and %s have %d marks", players[0].toString(), players[1].toString(), score);
+		return String.format("Team %s and %s", players[0].toString(), players[1].toString());
 	}
 
 	protected void winByForfiet() {

@@ -47,17 +47,18 @@ public class Game {
 		return Player.getReorderedPlayers(players, players[playedHands.size() % 4]);
 	}
 
-	protected void completeHand() {
+	protected Hand completeHand() {
 		if (currentHand != null) {
 			currentHand.completeHand();
 			playedHands.add(currentHand);
 			
-			// TODO move this check to a validator
 			if (currentHand.getHandWinner() != null)
 				currentHand.getHandWinner().addToScore(currentHand.getWinningBid().getMarks());
 		}
 		
+		Hand hand = currentHand;
 		currentHand = null;
+		return hand;
 	}
 
 	public ArrayList<Hand> getPlayedHands() {

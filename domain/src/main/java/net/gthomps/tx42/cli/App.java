@@ -24,70 +24,122 @@ import net.gthomps.tx42.validation.ValidatorException;
  */
 public class App 
 {
-	
-	//TODO more messages
-	//TODO messages from state
-	
 	GameService service = new GameService();
 	public void run() throws ValidatorException, IOException {
-		Player[] players = new Player[4];
-		Player human = players[0] = new Player("Player 1");
-		players[1] = new Player("Player 2");
-		players[2] = new Player("Player 3");
-		players[3] = new Player("Player 4");
+		Player[] players = createPlayers();
+		
+		Player human = players[0];
 		
 		GameState state = service.createNewGame(players, new BidValidator42(), new PlayValidator42());
+		outputStateMessages(state);
+		
+		while (!state.getState().equals(State.Over)) {
 
-		while (state.getState().equals(State.Bidding)) {
-
-			Player[] biddingPlayers = service.getGame().getHandOrderedPlayers();
-			for (Player player : biddingPlayers) {
-				BidMaker bidMaker = new SimpleBidMaker();
-				
-				Bid bid;
-				if (player.equals(human)) {
-					bid = getBidFromHuman(human);
-				} else {
-					bid = bidMaker.makeBid(service.getGame(), player);
-				}
-				
-				System.out.println(bid);
-				state = service.placeBid(bid);
+			while (state.getState().equals(State.Bidding)) {
+				state = bid(human, state);
 			}
 
-			int trump;
-			if (state.getNextPlayer().equals(human)) {
-				trump = getTrumpFromHuman(human);
-			} else {
-				trump = 5;
+			while (state.getState().equals(State.SettingTrump)) {
+				state = setTrump(human, state);
 			}
-			
-			state = service.setTrump(trump);
 			
 			while (state.getState().equals(State.Playing)) {
-				PlayMaker playMaker = new SimplePlayMaker();
-				
-				Domino domino;
-				if (state.getNextPlayer().equals(human)) {
-					domino = getDominoFromHuman(human);
-				} else {
-					domino = playMaker.chooseDomino(service.getGame(), state.getNextPlayer());
-				}
-				
-				System.out.println(domino);
-				state = service.playDomino(state.getNextPlayer(), domino);
+				state = playDomino(human, state);
 			}
 		}
+	}
+
+	private GameState playDomino(Player human, GameState state) throws IOException, ValidatorException {
+		PlayMaker playMaker = new SimplePlayMaker();
 		
-		System.out.println(service.getGame().getWinner());
+		Domino domino;
+		if (state.getNextPlayer().equals(human)) {
+			domino = getDominoFromHuman(human);
+		} else {
+			domino = playMaker.chooseDomino(service.getGame(), state.getNextPlayer());
+		}
+		
+		// if no domino is played, player is forfeiting
+		if (domino != null)
+			state = service.playDomino(state.getNextPlayer(), domino);
+		else		
+			state = service.forfeit(state.getNextPlayer());
+		
+		outputStateMessages(state);
+		return state;
+	}
+
+	private GameState setTrump(Player human, GameState state) throws IOException {
+		BidMaker bidMaker = new SimpleBidMaker();
+		int trump;
+		if (state.getNextPlayer().equals(human)) {
+			trump = getTrumpFromHuman(human);
+		} else {
+			trump = bidMaker.selectTrump(service.getGame(), state.getNextPlayer());
+		}
+		
+		state = service.setTrump(state.getNextPlayer(), trump);
+		outputStateMessages(state);
+		return state;
+	}
+
+	private GameState bid(Player human, GameState state) throws IOException, ValidatorException {
+		Player player = state.getNextPlayer();
+		Bid bid;
+		if (player.equals(human)) {
+			bid = getBidFromHuman(human);
+		} else {
+			BidMaker bidMaker = new SimpleBidMaker();
+			bid = bidMaker.makeBid(service.getGame(), player);
+		}
+		
+		state = service.placeBid(bid);
+		outputStateMessages(state);
+		return state;
+	}
+
+	private Player[] createPlayers() {
+		Player[] players = new Player[4];
+		players[0] = new Player("Human");
+		players[1] = new Player("CPU");
+		players[2] = new Player("Human's Partner");
+		players[3] = new Player("CPU's Partner");
+		return players;
+	}
+
+	private void outputStateMessages(GameState state) {
+		for (String s : state.getMessages()) {
+			System.out.println(s);
+		}
+		
+		if (state.getNextPlayer() != null)
+			System.out.println(String.format("%s turn for %s", state.getNextPlayer().toString(), state.getState().toString()));
 	}
 
 	private Domino getDominoFromHuman(Player human) throws IOException {
 		showDominos(human);
 		System.out.print("Play domino:  ");
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		String domino = br.readLine();
-		return human.getDominosInHand().get(Integer.parseInt(domino) - 1);
+		String response = br.readLine();
+		
+		if (response.equals("f"))
+			return null;
+
+		int index = -1;
+		try {
+			index = Integer.parseInt(response) - 1;
+		}
+		catch (NumberFormatException nfe) {
+			System.out.println(nfe.getMessage());
+		}
+
+		if (index < 0 || index > human.getDominosInHand().size() - 1 ) {
+			System.out.println(String.format("%s is not a valid domino", response));
+			return getDominoFromHuman(human);
+		}
+		
+		Domino domino = human.getDominosInHand().get(index);
+		return domino;
 	}
 
 	private int getTrumpFromHuman(Player human) throws IOException {

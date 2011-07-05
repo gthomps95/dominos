@@ -165,4 +165,12 @@ public class DominoTest {
 		assertTrue((new Domino(4,2)).equals(new Domino(2,4)));
 		assertFalse((new Domino(4,2)).equals(new Domino(1,4)));
 	}
+	
+	@Test
+	public void testTrumpIsZero() {
+		Domino ledDomino = new Domino(3,0);
+		Domino domino = new Domino(0,0);
+		
+		assertTrue(domino.beats(0, ledDomino));
+	}
 }

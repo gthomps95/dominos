@@ -1,8 +1,11 @@
 package net.gthomps.tx42;
 
+import java.util.ArrayList;
+
 public class GameState {
 	private State state;
 	private Player nextPlayer;
+	private ArrayList<String> messages = new ArrayList<String>();
 	
 	public enum State {
 		Bidding,
@@ -12,8 +15,30 @@ public class GameState {
 	}
 	
 	public GameState(State state, Player nextPlayer) {
+		this(state, nextPlayer, (String) null);
+	}
+
+	public GameState(State state, Player nextPlayer, String message) {
+		ArrayList<String> messages = new ArrayList<String>();
+		
+		if (message != null)
+			messages.add(message);
+		
+		initialize(state, nextPlayer, messages);
+	}
+	
+	private void initialize(State state, Player nextPlayer, ArrayList<String> messages) {
 		this.state = state;
 		this.nextPlayer = nextPlayer;
+		
+		if (messages == null)
+			messages = new ArrayList<String>();
+		
+		this.messages = messages;
+	}
+
+	public GameState(State state, Player nextPlayer, ArrayList<String> messages) {
+		initialize(state, nextPlayer, messages);
 	}
 
 	public State getState() {
@@ -36,5 +61,12 @@ public class GameState {
 		return player.equals(getNextPlayer());
 	}
 
+	public void addMessage(String message) {
+		messages.add(message);
+	}
+	
+	public ArrayList<String> getMessages() {
+		return messages;
+	}
 
 }

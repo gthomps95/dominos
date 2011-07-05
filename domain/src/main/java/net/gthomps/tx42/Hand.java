@@ -1,7 +1,7 @@
 package net.gthomps.tx42;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.Random;
 
 public class Hand {
 	private ArrayList<Bid> bids = new ArrayList<Bid>();
@@ -27,7 +27,7 @@ public class Hand {
 		int playerCount = players.length;
 		
 		while (drawn < fullCount) {
-			int index = (int) (Math.random() * dominos.size());
+			int index = (new Random()).nextInt(dominos.size());
 			
 			players[drawn % playerCount].addDominoToHand(dominos.remove(index));
 			drawn += 1;			
@@ -65,37 +65,22 @@ public class Hand {
 		return playedTricks;
 	}
 
-	protected Player completeTrick() {
+	protected Trick completeTrick() {
 		if (currentTrick != null) 
 			playedTricks.add(currentTrick);
 		
-		Player trickWinner = currentTrick.getWinningPlayer();
+		Trick previousTrick = currentTrick;
 		currentTrick = null;
-		return trickWinner;
+		return previousTrick;
 	}
 	
 	public Team getHandWinner() {
-		return Hand.getHandWinner(teams, players, getPlayedTricks(), getWinningBid());
-	}
-	
-	public static Team getHandWinner(Team[] teams, Player[] players, ArrayList<Trick> playedTricks, Bid winningBid) {
-		// TODO factor in nello
-		
-		Hashtable<Player, Integer> wonPoints = new Hashtable<Player, Integer>();
-		for (Player p : players)
-			wonPoints.put(p, new Integer(0));
-				
-		for (Trick t : playedTricks) {
-			Player winningPlayer = t.getWinningPlayer();
-			wonPoints.put(winningPlayer, wonPoints.get(winningPlayer) + t.getPointCount() );
-		}
-		
 		Player bidWinner = winningBid.getPlayer();
 		Team bidWinningTeam = Team.getTeam(teams, bidWinner);
 		Team settingTeam = Team.getOtherTeam(teams, bidWinner);
 
-		int biddingTeamPoints = wonPoints.get(bidWinningTeam.getPlayer1()) + wonPoints.get(bidWinningTeam.getPlayer2());
-		int otherTeamPoints = wonPoints.get(settingTeam.getPlayer1()) + wonPoints.get(settingTeam.getPlayer2());
+		int biddingTeamPoints = getWonPoints(bidWinningTeam);
+		int otherTeamPoints = getWonPoints(settingTeam);
 
 		if (winningBid.enoughPointsToWinBid(biddingTeamPoints))
 			return bidWinningTeam;
@@ -103,6 +88,17 @@ public class Hand {
 			return settingTeam;
 		
 		return null;
+	}
+
+	public int getWonPoints(Team team) {
+		int wonPoints = 0;
+				
+		for (Trick t : playedTricks) {
+			if (team.containsPlayer(t.getWinningPlayer()))
+				wonPoints += t.getPointCount();
+		}
+
+		return wonPoints;
 	}
 
 	public boolean isOver() {

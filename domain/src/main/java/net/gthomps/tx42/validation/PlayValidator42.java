@@ -39,7 +39,10 @@ public class PlayValidator42 extends Validator42Base implements PlayValidator {
 			
 		for (Domino domino : player.getDominosInHand()) {
 			if (domino.followsSuit(ledDomino, trump)) {
-				messages.add(String.format("%s must follow suit of %d", player.toString(), trump));
+				int suit = ledDomino.getHighSide();
+				if (ledDomino.isTrump(trump))
+					suit = trump;
+				messages.add(String.format("%s must follow suit of %d", player.toString(), suit));
 				break;
 			}
 		}

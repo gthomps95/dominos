@@ -22,10 +22,6 @@ public class GameServiceTest {
 	private BidValidator testBidValidator = new TestBidValidator();
 	private PlayValidator testPlayValidator = new TestPlayValidator();
 	
-	// TODO add UI
-	// TODO add bid AI
-	// TODO add play AI
-	
 	@Test
 	public void newGameHasFourPlayers() {
 		service.createNewGame(PlayerTest.createFourGenericPlayers(), testBidValidator, testPlayValidator);
@@ -98,7 +94,7 @@ public class GameServiceTest {
 		Bid[] bids = createFourBids(service.getGame().getPlayers());
 		placeBids(bids);
 		
-		service.setTrump(0);
+		service.setTrump(null, 0);
 		
 		assertNotNull(service.getGame().getCurrentHand().getCurrentTrick());
 	}
@@ -119,7 +115,7 @@ public class GameServiceTest {
 
 		Bid[] bids = createFourBids(service.getGame().getPlayers());
 		placeBids(bids);
-		service.setTrump(0);
+		service.setTrump(null, 0);
 		
 		for (Player p : service.getGame().getPlayers())
 			service.playDomino(p, new Domino(0,0));
@@ -134,7 +130,7 @@ public class GameServiceTest {
 		service.createNewGame(players, testBidValidator, testPlayValidator);
 		assertNull(service.getGame().getWinner());
 
-		service.forfiet(service.getGame().getTeam1().getPlayer1());
+		service.forfeit(service.getGame().getTeam1().getPlayer1());
 		assertEquals(service.getGame().getTeam2(), service.getGame().getWinner());
 	}
 	
@@ -157,7 +153,7 @@ public class GameServiceTest {
 			}
 			
 			assertEquals(-1, service.getGame().getCurrentHand().getTrump());			
-			state = service.setTrump(5);
+			state = service.setTrump(state.getNextPlayer(), 5);
 			assertEquals(5, service.getGame().getCurrentHand().getTrump());			
 			assertEquals(5, service.getGame().getCurrentHand().getCurrentTrick().getTrump());			
 			

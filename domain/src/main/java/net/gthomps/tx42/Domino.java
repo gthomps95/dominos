@@ -2,7 +2,7 @@ package net.gthomps.tx42;
 
 import java.util.ArrayList;
 
-public class Domino {
+public class Domino implements Comparable<Domino> {
 	public static final int MIN_SIDE_VALUE = 0;
 	public static final int MAX_SIDE_VALUE = 6;
 	
@@ -56,7 +56,6 @@ public class Domino {
 		return getHighSide() == trump || getLowSide() == trump;
 	}
 
-	// TODO does 0:0 beat 0:3 if trump is zero
 	public boolean beats(int trump, Domino domino) {
 		if ( isTrump(trump) && !domino.isTrump(trump) ) {
 			return true;
@@ -65,6 +64,9 @@ public class Domino {
 		} else if (isTrump(trump) && domino.isTrump(trump)) {
 			if (domino.getIsDouble())
 				return false;
+
+			if (getIsDouble())
+				return true;
 			
 			if (domino.getHighSide() == trump && getHighSide() == trump)
 				return getLowSide() > domino.getLowSide();
@@ -110,5 +112,10 @@ public class Domino {
 	
 	public boolean equals(Domino rhs) {
 		return getHighSide() == rhs.getHighSide() && getLowSide() == rhs.getLowSide();
+	}
+
+	@Override
+	public int compareTo(Domino rhs) {
+		return toString().compareTo(rhs.toString());
 	}
 }
