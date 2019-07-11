@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/pom.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" default="true" project-jdk-name="1.7" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/out" />
+  </component>
+  <component name="SbtLocalSettings">
+    <option name="modificationStamps">
+      <map>
+        <entry key="$PROJECT_DIR$/../../../DataTools/scala" value="1486570331000" />
+        <entry key="$PROJECT_DIR$/../../../DataTools/scala/indexapp" value="1486569940000" />
+        <entry key="$PROJECT_DIR$/../../../Play/hello" value="1485374623000" />
+        <entry key="$PROJECT_DIR$/../../../Play/json" value="1485970658000" />
+        <entry key="$PROJECT_DIR$/../../../Play/products" value="1485377009000" />
+        <entry key="$PROJECT_DIR$/../../../Play/reactive-web-applications/CH05" value="1486071794000" />
+        <entry key="$PROJECT_DIR$/../../../Play/reactive-web-applications/CH06" value="1486071794000" />
+        <entry key="$PROJECT_DIR$/../../../Play/sample-applications/ch02-your-first-play-application/first-sample" value="1485386147000" />
+        <entry key="$PROJECT_DIR$/../../../Play/sample-applications/ch02-your-first-play-application/product-details" value="1485386147000" />
+        <entry key="$PROJECT_DIR$/../../../Play/twitter-service" value="1486072631000" />
+        <entry key="$PROJECT_DIR$/../../../Play/twitter-stream" value="1485271971000" />
+        <entry key="$PROJECT_DIR$/../../../Play/use-state" value="1489517743000" />
+        <entry key="$PROJECT_DIR$/../../../Play/vocab" value="1485296984000" />
+        <entry key="$PROJECT_DIR$/../../../Scala/akka-in-action/chapter-conf-deploy" value="1486757524000" />
+        <entry key="$PROJECT_DIR$/../../../Scala/akka-in-action/chapter-remoting" value="1486757524000" />
+        <entry key="$PROJECT_DIR$/../../../Scala/akka-in-action/chapter-up-and-running" value="1486757524000" />
+        <entry key="$PROJECT_DIR$/../../../Scala/gui_testing" value="1486139117000" />
+        <entry key="$PROJECT_DIR$/../../../Scala/mastering-akka/initial-example-app" value="10409590226000" />
+        <entry key="$PROJECT_DIR$/../../../Scala/prog-scala-2nd-ed-code-examples" value="1484247858000" />
+        <entry key="$PROJECT_DIR$/../../../Spark/blog-spark-naive-bayes-reuters" value="1488378902000" />
+      </map>
+    </option>
+    <option name="externalProjectsViewState">
+      <projects_view />
+    </option>
+  </component>
+</project>
